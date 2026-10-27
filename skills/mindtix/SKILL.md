@@ -1,6 +1,6 @@
 ---
 name: mindtix
-description: A second brain that gets to know you and helps you actually learn, kept as a folder of plain markdown. Sets up a brain, imports exports (Instagram, WhatsApp, ChatGPT, Claude, Takeout, Obsidian), files notes, teaches topics by making the user produce, runs spaced-repetition recall, writes an evidence-based read of the user, and exports a profile, Anki deck, backup or local web app. Use when the user says "mindtix", "set up mindtix", "my brain", "second brain", "save this", "import my export", "teach me X", "quiz me", "what's due", "today", "reflect on me", "weekly review", "tidy the brain", "sort these files", "put this file in my brain", "export my brain", or "forget someone", or works in a folder that has MINDTIX.md or MIND.md.
+description: A second brain that gets to know you and helps you actually learn, kept as a folder of plain markdown. Sets up a brain, imports exports (Instagram, WhatsApp, ChatGPT, Claude, Takeout, Obsidian), files notes, teaches topics by making the user produce, runs spaced-repetition recall, writes an evidence-based read of the user, and exports a profile, Anki deck, backup or local web app. Use when the user says "mindtix", "set up mindtix", "my brain", "second brain", "save this", "import my export", "teach me X", "quiz me", "expert review", "ask Musk", "ask Feynman", "what's due", "today", "reflect on me", "weekly review", "tidy the brain", "sort these files", "put this file in my brain", "export my brain", or "forget someone", or works in a folder that has MINDTIX.md or MIND.md.
 argument-hint: "[workflow] [arguments]"
 ---
 
@@ -19,6 +19,7 @@ the one that fits. Read that file in full and follow it.
 | `init` | create a new brain ("set up mindtix"), with a first short interview |
 | `capture` | save thoughts, notes, highlights, or route loose files into the vault |
 | `learn` | active learning: teach, quiz, diagnose repeated mistakes, or scenario challenge (`challenge`) |
+| `expert` | summon expert personas (Musk, Feynman, Freud, etc.) to critique work, teach in their style, and surface opportunities |
 | `recall` | review the recall cards that are due using FSRS |
 | `today` | do the daily 5-10 minutes: due cards, one learning step, one highlight |
 | `reflect` | get the AI's read of them (`insight/`), cognitive profile, and mental connections |
