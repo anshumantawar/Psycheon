@@ -1,0 +1,28 @@
+# Today
+
+One short session, three steps. Keep it moving: if they want to stop after any step, stop
+and still save. Work from the brain root (the folder with `psycheon.md` or `MIND.md`); if there is none,
+suggest `/psycheon init`.
+
+1. **Recall (about 3 minutes).** Run `/psycheon recall`, but ask at most **5** due cards. If
+   none are due, say so in one line and move on.
+2. **One learning step (about 5 minutes).** Find the topic being learned now: the
+   `learning/<topic>/map.md` (skip `_example`) with unchecked modules and the nearest
+   deadline; if none has a deadline, the one with the newest entry in `sessions.md`. Run one
+   short `/psycheon learn teach` step on its next unchecked module: one small task, a hint only
+   if they're stuck, then redo without help. A module can take several days; don't rush the
+   tick. If nothing is being learned, offer `/psycheon learn` and skip this step.
+3. **One old thing, resurfaced.** Alternate day by day:
+   - **An old idea:** a card or idea from a `knowledge/` topic that wasn't touched in steps 1-2
+     and wasn't reviewed in the last week, asked as a "what would happen if…" or "how does this
+     connect to…" question.
+   - **A highlight:** one quote from `## Highlights` in `knowledge/sources/` not resurfaced in
+     the last 30 days (check that page's `## Log`). Show it with its source and ask "still
+     agree? what would you add?". Append their answer, dated, to `## My take`, and a
+     `- YYYY-MM-DD today: resurfaced` line to its `## Log`. No sources yet → an old idea. For an idea, grade in 1-2 lines; if it was a card, ask sure
+   or guessing first and grade it with `srs.py` as recall does (`--via today`).
+4. **Report in 2 lines:** what they did today, and what's waiting tomorrow (cards due
+   tomorrow, the next module).
+
+Recall and learn save their own logs, cards and mistakes. Add nothing else.
+
