@@ -1,5 +1,6 @@
 __pycache__/
-skills/mindtix/site/mindtix.json
+skills/psycheon/site/psycheon.json
+skills/psycheon/site/mindtix.json
 .agents/
 .claude/
 sessions/
