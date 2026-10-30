@@ -20,8 +20,11 @@ tags:
 ---
 # psycheon
 
-## Configuration & Network Access
+## Configuration, Dependencies & Network Access
 - **Configuration**: Stores brain path configuration locally in `~/.config/psycheon/brain` and LLM settings in the brain's local `.env` file.
+- **Dependencies & Installation**:
+  - Python scripts (`export.py`, `srs.py`, `to_text.py`): Require Python 3.10+ (see `requirements.txt`).
+  - Web App Site (`site/`): Node.js 22+ packages listed in `skills/psycheon/site/package.json`. Install via `npm install` inside `skills/psycheon/site/`.
 - **Network Access**: Outbound network calls (HTTPS) are made exclusively to user-configured LLM endpoints (e.g. OpenAI-compatible APIs or Anthropic API) when using the Ask web interface to query the brain.
 
 
