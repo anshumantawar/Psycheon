@@ -159,7 +159,7 @@
   site served locally and rebuilt on every load, plus an Ask page that answers from the notes,
   cites them as links and remembers: each chat is kept in `logs/`, and new chats see earlier
   questions), or custom (built to the user's description from the JSON export). Claude via the
-  Messages API (`ANTHROPIC_API_KEY`) or any OpenAI-compatible endpoint (`MINDTIX_API_URL`), set
+  Messages API (`API_KEY`) or any OpenAI-compatible endpoint (`MINDTIX_API_URL`), set
   in the brain's `.env`. Scripts run with `uv` when it's installed.
 - **Template:** `.env` is gitignored.
 

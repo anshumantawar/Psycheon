@@ -60,7 +60,7 @@ const LOGS = () => path.join(BRAIN, "logs");
 const pad = n => String(n).padStart(2, "0");
 const stamp = d => `${d.toLocaleDateString("en-CA")} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 
-/** Environment first, then the brain's .env (KEY=value lines). */
+/** Brain's .env configuration (KEY=value lines). */
 function config() {
   const env = {};
   try {
@@ -69,7 +69,7 @@ function config() {
       if (i > 0 && !t.startsWith("#")) env[t.slice(0, i).trim().replace(/^export\s+/, "")] = t.slice(i + 1).trim().replace(/^['"]|['"]$/g, "");
     }
   } catch {}
-  return (k, d = "") => process.env[k] || env[k] || d;
+  return (key, fallback = "") => env[key] || (key === "NODE_ENV" || key === "PATH" ? process.env[key] : "") || fallback;
 }
 
 // ---------- Which engine ----------
@@ -85,7 +85,10 @@ const quote = a => WIN && /[\s"&|<>^]/.test(a) ? `"${a}"` : a;
 let found;
 /** Whether Claude Code is installed (checked once per server). */
 export const hasClaude = () => found ??= (() => {
-  try { return spawnSync(CLAUDE[0], [...CLAUDE.slice(1), "--version"], { timeout: 15000, env: cleanEnv(), shell: WIN }).status === 0 } catch { return false }
+  try {
+    const cmdArgs = [CLAUDE[0], ...CLAUDE.slice(1), "--version"].map(quote);
+    return spawnSync(cmdArgs[0], cmdArgs.slice(1), { timeout: 15000, env: cleanEnv(), shell: WIN }).status === 0;
+  } catch { return false }
 })();
 
 /** The API engine's AI, or null when none is set up. Never includes a key. */
@@ -180,7 +183,8 @@ function runClaude(prompt, uuid, resume, emit, signal) {
     "--permission-mode", s.edits === false ? "default" : "acceptEdits", "--append-system-prompt", APPEND,
     ...(resume ? ["--resume", uuid] : ["--session-id", uuid]), ...(MODELS.includes(s.model) ? ["--model", s.model] : [])];
   return new Promise((resolve, reject) => {
-    const child = spawn(CLAUDE[0], [...CLAUDE.slice(1), ...args].map(quote), { cwd: BRAIN, env: cleanEnv(), shell: WIN });
+    const cmdArgs = [CLAUDE[0], ...CLAUDE.slice(1), ...args].map(quote);
+    const child = spawn(cmdArgs[0], cmdArgs.slice(1), { cwd: BRAIN, env: cleanEnv(), shell: WIN });
     const kill = () => child.kill();
     signal?.addEventListener("abort", kill);
     let buf = "", err = "", result = null;
@@ -309,7 +313,7 @@ function context(question, history) {
   }
   const earlier = sessions().slice(0, 15).flatMap(s => readLog(s.id).filter(t => t.role === "user").map(t => `- ${t.at}: ${t.content.slice(0, 200)}`));
   let stable = SYSTEM;
-  const mindName = fs.existsSync(path.join(BRAIN, "MINDTIX.md")) ? "MINDTIX.md" : "MIND.md";
+  const mindName = fs.existsSync(path.join(BRAIN, "psycheon.md")) ? "psycheon.md" : fs.existsSync(path.join(BRAIN, "MINDTIX.md")) ? "MINDTIX.md" : "MIND.md";
   for (const name of [mindName, "INDEX.md"]) {
     try { stable += `\n\n=== ${name} ===\n` + fs.readFileSync(path.join(BRAIN, name), "utf8") } catch {}
   }

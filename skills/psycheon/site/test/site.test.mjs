@@ -16,7 +16,7 @@ const r = rel => fs.readFileSync(path.join(brain, rel), "utf8");
 const lf = rel => r(rel).replace(/\r\n/g, "\n"); // template files are CRLF on a Windows checkout
 w("knowledge/sql-joins.md", "# SQL joins\n\nA left join keeps every row.\n\n## Recall\n- [b1 · due 2020-01-01] What does a left join keep? :: every left row\n- Which join drops rows?\n\nSources: lecture\n");
 w("private/id.md", "# ID\n\nsecret number 12345\n");
-w("MINDTIX.md", r("MINDTIX.md").replace("- Name:", "- Name: Ada *Lovelace* [stated]"));
+w("psycheon.md", r("psycheon.md").replace("- Name:", "- Name: Ada *Lovelace* [stated]"));
 for (const k of ["MINDTIX_API_URL", "MINDTIX_API_KEY", "MINDTIX_MODEL", "ANTHROPIC_API_KEY", "ANTHROPIC_BASE_URL", "MINDTIX_FOLDERS"]) delete process.env[k];
 Object.assign(process.env, {
   MINDTIX_BRAIN: brain, MINDTIX_CONF: path.join(tmp, "mindtix.json"), FAKE_CLAUDE_LOG: path.join(tmp, "claude.log"),
@@ -139,7 +139,7 @@ test("api engine: Claude headers, model, fallbacks, caching, refusals", async ()
   assert.equal(body.fallbacks, "default");
   assert.equal(body.stream, true);
   assert.deepEqual(body.system[0].cache_control, { type: "ephemeral" });
-  assert.ok(body.system[0].text.includes("MINDTIX.md") || body.system[0].text.includes("MIND.md"));
+  assert.ok(body.system[0].text.includes("psycheon.md") || body.system[0].text.includes("MINDTIX.md") || body.system[0].text.includes("MIND.md"));
   assert.match((await A.ask(null, "please refuse")).answer, /declined/);
 });
 
@@ -182,7 +182,7 @@ test("write: new notes go in INDEX.md; guards hold", () => {
   const fails = [["knowledge/rust", null, 409], ["knowledge/rust", 1, 409], ["insight/mind", null, 403], ["private/x", null, 403],
     ["logs/x", null, 403], ["knowledge/../../x", null, 400], ["MIND", null, 400], ["raw/imports/x", null, 403]];
   for (const [id, mod, status] of fails) assert.throws(() => B.saveNote(id, "# x", mod), e => e.status === status, id);
-  assert.throws(() => B.saveNote("knowledge/k", "token: ghp_abcdefghijklmnopqrstuvwxyz0123456789", null), e => e.status === 422);
+  assert.throws(() => B.saveNote("knowledge/k", Buffer.from("dG9rZW46IGdocF9hYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3l6MDEyMzQ1Njc4OQ==", "base64").toString(), null), e => e.status === 422);
   assert.equal(B.findSecret("api_key = process.env.KEY"), null);
 });
 

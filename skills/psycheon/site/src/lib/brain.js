@@ -34,8 +34,8 @@ const MD_NOISE = /^\s*(#{1,6}\s+|>\s?|[-*+]\s+|\d+\.\s+|\|)|[*_`]|!?\[\[([^\]|#]
 export const INTERVALS = [1, 3, 7, 14, 30, 90]; // the old Leitner boxes, kept as labels for stability
 const INDEX_SECTIONS = { notes: "Notes", self: "Who I am", knowledge: "Knowledge", learning: "Learning now", projects: "Projects" };
 
-export const isBrain = () => fs.existsSync(path.join(BRAIN, "MINDTIX.md")) || fs.existsSync(path.join(BRAIN, "MIND.md"));
-export const mindFile = () => fs.existsSync(path.join(BRAIN, "MINDTIX.md")) ? path.join(BRAIN, "MINDTIX.md") : path.join(BRAIN, "MIND.md");
+export const isBrain = () => fs.existsSync(path.join(BRAIN, "psycheon.md")) || fs.existsSync(path.join(BRAIN, "MINDTIX.md")) || fs.existsSync(path.join(BRAIN, "MIND.md"));
+export const mindFile = () => fs.existsSync(path.join(BRAIN, "psycheon.md")) ? path.join(BRAIN, "psycheon.md") : fs.existsSync(path.join(BRAIN, "MINDTIX.md")) ? path.join(BRAIN, "MINDTIX.md") : path.join(BRAIN, "MIND.md");
 export const today = (plus = 0) => new Date(Date.now() + plus * 864e5).toLocaleDateString("en-CA"); // local YYYY-MM-DD
 export const noteUrl = id => "/n/" + id.split("/").map(encodeURIComponent).join("/");
 // Notes are parsed with \n line ends; a file written back keeps its own (\r\n on Windows checkouts)

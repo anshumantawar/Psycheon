@@ -8,8 +8,8 @@ import tempfile
 import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SCRIPT = os.path.join(HERE, "..", "skills", "mindtix", "export.py")
-TEMPLATE = os.path.join(HERE, "..", "skills", "mindtix", "template")
+SCRIPT = os.path.join(HERE, "..", "skills", "psycheon", "export.py")
+TEMPLATE = os.path.join(HERE, "..", "skills", "psycheon", "template")
 
 
 def run(*args):
@@ -28,14 +28,14 @@ with tempfile.TemporaryDirectory() as tmp:
     open(os.path.join(brain, "private", "id.md"), "w", encoding="utf-8").write("secret id")
     open(os.path.join(brain, "raw", "imports", "chat.txt"), "w", encoding="utf-8").write("someone else's message")
 
-    mind = os.path.join(brain, "MINDTIX.md") if os.path.isfile(os.path.join(brain, "MINDTIX.md")) else os.path.join(brain, "MIND.md")
+    mind = os.path.join(brain, "psycheon.md") if os.path.isfile(os.path.join(brain, "psycheon.md")) else (os.path.join(brain, "MINDTIX.md") if os.path.isfile(os.path.join(brain, "MINDTIX.md")) else os.path.join(brain, "MIND.md"))
     text = open(mind, encoding="utf-8").read().replace("- Name:", "- Name: Ada *Lovelace* [stated]", 1)
     open(mind, "w", encoding="utf-8").write(text)
 
     out = os.path.join(brain, "exports")
     assert "3 cards" in run("anki", brain, os.path.join(out, "c.txt"))
     deck = open(os.path.join(out, "c.txt"), encoding="utf-8").read()
-    assert "#deck:Mindtix" in deck and "#notetype:Basic" in deck, "Anki deck header includes deck and notetype"
+    assert "#deck:psycheon" in deck and "#notetype:Basic" in deck, "Anki deck header includes deck and notetype"
     assert "What does a left join keep?\t" in deck and "Why use not exists?" in deck
     assert "Which join keeps unmatched right rows?\tright join\t" in deck, "the stored answer is the back"
     assert "_example" not in deck and "n-1" not in deck, "template example cards are not exported"
@@ -43,7 +43,7 @@ with tempfile.TemporaryDirectory() as tmp:
     run("json", brain, os.path.join(out, "b.json"))
     data = json.load(open(os.path.join(out, "b.json"), encoding="utf-8"))
     paths = {n["path"] for n in data["notes"]}
-    assert "knowledge/sql-joins.md" in paths and ("MINDTIX.md" in paths or "MIND.md" in paths)
+    assert "knowledge/sql-joins.md" in paths and ("psycheon.md" in paths or "MINDTIX.md" in paths or "MIND.md" in paths)
     assert not any(p.startswith(("private/", "raw/imports/", "logs/")) for p in paths)
     assert {"box": 1, "due": "2026-10-10"}.items() <= next(c for c in data["cards"] if c["box"] == 1).items()
     assert {"question": "Which join keeps unmatched right rows?", "answer": "right join", "box": 2, "s": 9.1, "d": 4.2}.items() <= \
@@ -52,7 +52,7 @@ with tempfile.TemporaryDirectory() as tmp:
 
     run("bundle", brain, os.path.join(out, "b.zip"))
     names = zipfile.ZipFile(os.path.join(out, "b.zip")).namelist()
-    assert ("MINDTIX.md" in names or "MIND.md" in names) and "knowledge/sql-joins.md" in names
+    assert ("psycheon.md" in names or "MINDTIX.md" in names or "MIND.md" in names) and "knowledge/sql-joins.md" in names
     assert not any(n.startswith(("private/", "raw/imports/", "exports/", ".git/")) for n in names), names
 
     # site: sets up the Astro app in exports/site/ by default, remembers where, keeps the user's copy
@@ -62,15 +62,15 @@ with tempfile.TemporaryDirectory() as tmp:
     out_ = run("site", brain, "--no-install")
     assert "copied" in out_ and os.path.isfile(os.path.join(site, "package.json")) and not os.path.exists(os.path.join(site, "index.html")), out_
     assert not os.path.exists(os.path.join(site, "node_modules")) and not os.path.exists(os.path.join(site, "dist"))
-    conf = json.load(open(os.path.join(site, "mindtix.json")))
+    conf = json.load(open(os.path.join(site, "psycheon.json"))) if os.path.isfile(os.path.join(site, "psycheon.json")) else json.load(open(os.path.join(site, "mindtix.json")))
     assert conf == {"brain": os.path.abspath(brain), "folders": "all"}, conf
     assert json.load(open(os.path.join(brain, "exports", "site.json")))["path"] == site
     open(os.path.join(site, "src", "mine.txt"), "w").write("my change")
     assert "kept your copy" in run("site", brain, "knowledge", "projects", "--no-install")
     assert os.path.isfile(os.path.join(site, "src", "mine.txt")), "a second run keeps their copy"
-    assert json.load(open(os.path.join(site, "mindtix.json")))["folders"] == "knowledge projects"
+    assert (json.load(open(os.path.join(site, "psycheon.json"))) if os.path.isfile(os.path.join(site, "psycheon.json")) else json.load(open(os.path.join(site, "mindtix.json"))))["folders"] == "knowledge projects"
     assert "replaced" in run("site", brain, "--replace", "--no-install")
-    assert not os.path.exists(os.path.join(site, "src", "mine.txt")) and json.load(open(os.path.join(site, "mindtix.json")))["folders"] == "knowledge projects"
+    assert not os.path.exists(os.path.join(site, "src", "mine.txt")) and (json.load(open(os.path.join(site, "psycheon.json"))) if os.path.isfile(os.path.join(site, "psycheon.json")) else json.load(open(os.path.join(site, "mindtix.json"))))["folders"] == "knowledge projects"
     other = os.path.join(tmp, "brain-site")
     assert "copied" in run("site", brain, other, "--no-install") and os.path.isfile(os.path.join(other, "package.json"))
     assert "brain-site" in run("site", brain, "--no-install"), "the folder is remembered"
@@ -80,6 +80,6 @@ with tempfile.TemporaryDirectory() as tmp:
         assert r.returncode == 1, (bad, r.stdout)
 
     r = subprocess.run([sys.executable, SCRIPT, "anki", tmp, os.path.join(tmp, "x.txt")], capture_output=True, text=True)
-    assert r.returncode == 1 and "not a mindtix brain" in r.stdout
+    assert r.returncode == 1 and "not a psycheon brain" in r.stdout
 
 print("export ok")

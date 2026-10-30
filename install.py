@@ -20,7 +20,7 @@ import shutil
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SKILL = os.path.join(HERE, "skills", "mindtix")
+SKILL = os.path.join(HERE, "skills", "psycheon")
 # The one-skill-per-workflow names installed before 1.4; removed on install and uninstall
 OLD = ("capture", "connect-dots", "export", "forget", "import", "init", "know-me", "learn",
        "recall", "reflect", "review", "tidy", "today")
@@ -41,7 +41,7 @@ def portable(text, skill_dir=None):
 
 def install(dest, uninstall=False):
     os.makedirs(dest, exist_ok=True)
-    for name in ("mindtix",) + tuple("mindtix-" + n for n in OLD):
+    for name in ("psycheon", "mindtix") + tuple("psycheon-" + n for n in OLD) + tuple("mindtix-" + n for n in OLD):
         target = os.path.join(dest, name)
         if os.path.islink(target) or os.path.isfile(target):
             os.remove(target)
@@ -49,7 +49,7 @@ def install(dest, uninstall=False):
             shutil.rmtree(target)
     if uninstall:
         return
-    target = os.path.join(dest, "mindtix")
+    target = os.path.join(dest, "psycheon")
     shutil.copytree(SKILL, target, ignore=shutil.ignore_patterns(
         "__pycache__", "*.pyc", "node_modules", "dist", ".astro", "mindtix.json"))
     for root, _, files in os.walk(target):  # SKILL.md, the workflows and the template

@@ -1,10 +1,29 @@
 ---
 name: psycheon
-description: A second brain that gets to know you and helps you actually learn, kept as a folder of plain markdown. Sets up a brain, imports exports (Instagram, WhatsApp, ChatGPT, Claude, Takeout, Obsidian), files notes, teaches topics by making the user produce, runs spaced-repetition recall, writes an evidence-based read of the user, and exports a profile, Anki deck, backup or local web app. Use when the user says "psycheon", "set up psycheon", "my brain", "second brain", "save this", "import my export", "teach me X", "quiz me", "expert review", "ask Musk", "ask Feynman", "what's due", "today", "reflect on me", "weekly review", "tidy the brain", "sort these files", "put this file in my brain", "export my brain", or "forget someone", or works in a folder that has psycheon.md or MIND.md.
-argument-hint: "[workflow] [arguments]"
+description: A second brain that gets to know you and helps you actually learn,
+  kept as a folder of plain markdown. Sets up a brain, imports exports
+  (Instagram, WhatsApp, ChatGPT, Claude, Takeout, Obsidian), files notes,
+  teaches topics by making the user produce, runs spaced-repetition recall,
+  writes an evidence-based read of the user, and exports a profile, Anki deck,
+  backup or local web app. Use when the user says "psycheon", "set up psycheon",
+  "my brain", "second brain", "save this", "import my export", "teach me X",
+  "quiz me", "expert review", "ask Musk", "ask Feynman", "what's due", "today",
+  "reflect on me", "weekly review", "tidy the brain", "sort these files", "put
+  this file in my brain", "export my brain", or "forget someone", or works in a
+  folder that has psycheon.md or MIND.md.
+tags:
+  - second-brain
+  - learning
+  - spaced-repetition
+  - notes
+  - pkm
 ---
-
 # psycheon
+
+## Configuration & Network Access
+- **Configuration**: Stores brain path configuration locally in `~/.config/psycheon/brain` and LLM settings in the brain's local `.env` file.
+- **Network Access**: Outbound network calls (HTTPS) are made exclusively to user-configured LLM endpoints (e.g. OpenAI-compatible APIs or Anthropic API) when using the Ask web interface to query the brain.
+
 
 Asked for: $ARGUMENTS
 

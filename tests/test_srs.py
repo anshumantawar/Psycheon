@@ -9,7 +9,7 @@ import tempfile
 from datetime import date
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SCRIPT = os.path.join(HERE, "..", "skills", "mindtix", "srs.py")
+SCRIPT = os.path.join(HERE, "..", "skills", "psycheon", "srs.py")
 sys.path.insert(0, os.path.dirname(SCRIPT))
 from srs import add, grade, review, stats  # noqa: E402
 

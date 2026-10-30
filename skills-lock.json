@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "psycheon": {
+      "source": "anshumantawar/Psycheon",
+      "sourceType": "github",
+      "skillPath": "skills/psycheon/SKILL.md",
+      "computedHash": "3362b829bf5affff8b1e4adcf08ae831ccbf5cd4ee573868218f080eace99c36"
+    }
+  }
+}

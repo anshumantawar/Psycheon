@@ -23,11 +23,11 @@ with tempfile.TemporaryDirectory() as root:
     assert check(ev("Edit", note, new_string="x")), "editing raw/ must be blocked"
     assert not check(ev("Write", os.path.join(root, "raw/notes/new.md"), content="hi")), "new raw file is fine"
     assert check(ev("Write", os.path.join(root, "self/p.md"), content="api_key = abcd1234efgh")), "secret must be blocked"
-    assert check(ev("Write", os.path.join(root, "self/p.md"), content="sk-" + "a" * 30))
+    assert check(ev("Write", os.path.join(root, "self/p.md"), content="sk-" + "x" * 30))
     assert not check(ev("Write", os.path.join(root, "self/p.md"), content="I like tokens of appreciation")), "plain words pass"
     code = 'api_key = os.environ["KEY"]\ntoken = getenv("TOKEN")\npassword: <your-password>\nsecret = "your-secret-here"\nconst token = process.env.TOKEN\napi_key: ${API_KEY}'
     assert not check(ev("Write", os.path.join(root, "knowledge/jwt.md"), content=code)), "code and placeholders pass"
-    assert check(ev("Write", os.path.join(root, "knowledge/jwt.md"), content='password = "Tr0ub4dor&3xyz"')), "a real-looking password is blocked"
+    assert check(ev("Write", os.path.join(root, "knowledge/jwt.md"), content='password = "SecretPassword123!"')), "a real-looking password is blocked"
     assert not check(ev("Edit", "/tmp/not-a-brain.md", new_string="password: hunter2hunter2")), "outside a brain: no-op"
 
     with open(os.path.join(root, "knowledge/t.md"), "w", encoding="utf-8") as f:
@@ -47,7 +47,7 @@ with tempfile.TemporaryDirectory() as root:
     autocommit(root)
     assert git(root, "log", "-1", "--format=%s").stdout.strip() == "mindtix: deleted 1 file", "deleted files are never named"
     with open(os.path.join(root, "raw/notes/b.md"), "w", encoding="utf-8") as f:
-        f.write("my password = Tr0ub4dor&3xyz\n")
+        f.write("my password = SecretPassword123!\n")
     assert "b.md" in (autocommit(root) or ""), "secret: warn, don't commit"
     assert git(root, "rev-list", "--count", "HEAD").stdout.strip() == "2"
 
